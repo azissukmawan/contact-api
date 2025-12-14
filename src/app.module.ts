@@ -10,8 +10,10 @@ import { ContactModule } from './contact/contact.module';
         ThrottlerModule.forRootAsync({
             inject: [ConfigService],
             useFactory: (c: ConfigService) => ({
-                ttl: c.get('THROTTLE_TTL'),
-                limit: c.get('THROTTLE_LIMIT'),
+                throttlers: [{
+                    ttl: c.get('THROTTLE_TTL'),
+                    limit: c.get('THROTTLE_LIMIT'),
+                }],
             }),
         }),
         BullModule.forRootAsync({
