@@ -11,8 +11,8 @@ import { ContactModule } from './contact/contact.module';
             inject: [ConfigService],
             useFactory: (c: ConfigService) => ({
                 throttlers: [{
-                    ttl: c.get('THROTTLE_TTL'),
-                    limit: c.get('THROTTLE_LIMIT'),
+                    ttl: parseInt(c.get('THROTTLE_TTL') || '60', 10),
+                    limit: parseInt(c.get('THROTTLE_LIMIT') || '5', 10),
                 }],
             }),
         }),
