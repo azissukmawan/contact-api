@@ -21,7 +21,9 @@ import { ContactModule } from './contact/contact.module';
             useFactory: (c: ConfigService) => ({
                 connection: {
                     host: c.get('REDIS_HOST'),
-                    port: c.get('REDIS_PORT'),
+                    port: parseInt(c.get('REDIS_PORT') || '6379', 10),
+                    username: c.get('REDIS_USERNAME'),
+                    password: c.get('REDIS_PASSWORD'),
                 },
             }),
         }),
