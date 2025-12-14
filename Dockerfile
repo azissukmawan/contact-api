@@ -27,4 +27,4 @@ COPY --from=builder /app/prisma ./prisma
 RUN npm prune --omit=dev
 
 EXPOSE 3000
-CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
