@@ -1,7 +1,8 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { ContactModule } from './contact/contact.module';
 
 @Module({
@@ -11,7 +12,7 @@ import { ContactModule } from './contact/contact.module';
             inject: [ConfigService],
             useFactory: (c: ConfigService) => ({
                 throttlers: [{
-                    ttl: parseInt(c.get('THROTTLE_TTL') || '60', 10),
+                    ttl: parseInt(c.get('THROTTLE_TTL') || '60', 10) * 1000,
                     limit: parseInt(c.get('THROTTLE_LIMIT') || '5', 10),
                 }],
             }),
@@ -28,6 +29,12 @@ import { ContactModule } from './contact/contact.module';
             }),
         }),
         ContactModule,
+    ],
+    providers: [
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
     ],
 })
 export class AppModule {}
